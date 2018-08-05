@@ -10,11 +10,7 @@ app.secret_key = "monkey"
 def index():
     mysql = connectToMySQL('myfriendsdb')
     friends = mysql = mysql.query_db('SELECT * FROM friends')
-    print('*'*50)
-    print("Fetched all friends", *friends)
-
     return render_template('index.html', friends = friends)
-
 
 @app.route('/connect', methods=['POST'])
 def connect():
@@ -27,7 +23,8 @@ def connect():
         'occupation': request.form['occupation']
     }
     new_friend_id = mysql.query_db(query, data)
-
     return redirect('/')
+
+# Run server
 if __name__ == '__main__':
     app.run(debug = True)
