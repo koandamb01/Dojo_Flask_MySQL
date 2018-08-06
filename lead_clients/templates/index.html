@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <title>Lead and Clients</title>
+    <style>
+    .container{
+        padding-top: 30px;
+        padding-bottom: 60px;
+    }
+
+    .table{
+        border: 1px solid black;
+        height: 450px !important;
+    }
+
+    .table tr{
+        width: 100%;
+        display: inline-table;
+        table-layout: fixed;
+    }
+    .table tbody{
+        height: 400px !important;
+        width: 100%;
+        overflow-y: scroll;
+        position: absolute;
+    }
+    </style>
+
+    <script>
+        window.onload = function () {
+        var options = {
+            // title: {
+            //     text: "Customers and number of new leads"
+            // },
+            // subtitles: [{
+            // 	text: "As of November, 2017"
+            // }],
+            animationEnabled: true,
+            data: [{
+                type: "pie",
+                startAngle: 40,
+                toolTipContent: "<b>{label}</b>: {y}%",
+                showInLegend: "true",
+                legendText: "{label}",
+                indexLabelFontSize: 16,
+                indexLabel: "{label} - {y}%",
+                dataPoints: [
+                {% for data in clients_leads: %}
+                    
+                   {y: "{{ data['percentage']}}", label: "{{ data['client_name'] }}"},
+
+                {% endfor %}
+                ]
+            }]
+        };
+    
+
+
+        $("#chartContainer").CanvasJSChart(options);
+}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- <div class="form-group">
+            <input type="date" name="start">
+            <input type="date" name="end">
+            <button class="btn btn-primary" type="submit">Update</button>
+        </div> -->
+    
+        <p>List of all customers and # of leads</p>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Customer Name</th>
+                <th scope="col">Number of leads</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for data in clients_leads: %}
+                    <tr>
+                        <td>{{ data['client_name'] }}</td>
+                        <td>{{ data['number_of_leads'] }}</td>
+                    </tr>
+                {% endfor %}
+
+              <!-- <tr>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr> -->
+            
+            </tbody>
+        </table>
+
+        <h3 class="text-center">Customers and number of new leads</h3>
+        <div id="chartContainer" style="height: 700px; width: 100%;"></div>
+    </div>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+    <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+</body>
+</html>

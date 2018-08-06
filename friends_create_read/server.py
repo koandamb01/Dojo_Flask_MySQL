@@ -2,14 +2,14 @@ from flask import Flask, render_template, request, redirect, session
 from mysqlconnection import connectToMySQL # import the function connectToMySQL from the file mysqlconnection.py
 
 app = Flask(__name__)
-app.secret_key = "monkey"
+app.secret_key = "medmed"
 # images = Images(app)
 
 
 @app.route('/')
 def index():
     mysql = connectToMySQL('myfriendsdb')
-    friends = mysql = mysql.query_db('SELECT * FROM friends')
+    friends = mysql.query_db('SELECT * FROM friends')
     return render_template('index.html', friends = friends)
 
 @app.route('/connect', methods=['POST'])
