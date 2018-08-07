@@ -12,6 +12,10 @@
         padding-bottom: 60px;
     }
 
+    form{
+        background-color: red;
+        width: 70%;
+    }
     .table{
         border: 1px solid black;
         height: 450px !important;
@@ -66,11 +70,17 @@
 </head>
 <body>
     <div class="container">
-        <!-- <div class="form-group">
-            <input type="date" name="start">
-            <input type="date" name="end">
-            <button class="btn btn-primary" type="submit">Update</button>
-        </div> -->
+        <form action="/update" method="POST" class="form-row form-group">
+            <div class="col-md-3">
+                <input type="date" name="from" class="form-group">
+            </div>
+            <div class="col-md-3">
+                <input type="date" name="to" class="form-group">
+            </div>
+            <div class="col-sm-1">
+                <button class="btn btn-primary" type="submit">Update</button>
+            </div>
+        </form>
     
         <p>List of all customers and # of leads</p>
         <table class="table table-striped">
