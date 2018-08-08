@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+<div class="jumbotron">
+<div class="container">
+    {% for category, message in messages %}
+        {% if category == 'register' %}
+            <span class="text-success">{{ message }}</span>
+        {% endif %}
+    {% endfor %}
+    <h1 class="display-3">Welcome, {{ row[0]['first_name'] }}</h1>
+    <p>You've been logged in!</p>
+    <p><a class="btn btn-primary btn-lg" href="/logout" role="button">Logout</a></p>
+</div>
+</div>
+{% endwith %}
+{% endblock %}
