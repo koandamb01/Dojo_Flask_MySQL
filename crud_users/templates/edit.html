@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+<div class="container">
+    <h1>Edit User 1</h1>
+    <form class="form-row form-group" action="/update" method="POST">
+        <div class="col-md-6">
+            <input type="hidden" name="id" value="{{ id }}">
+            <input type="text" class="form-control" name="first_name" value="{{ first_name }}" placeholder="First Name">
+            <br>
+            <input type="text" class="form-control" name="last_name" value="{{ last_name }}" placeholder="Last Name">
+            <br>
+            <input type="email" class="form-control" name="email" value="{{ email }}" placeholder="email">
+            <br>
+            <button type="submit" class="btn btn-success">Update</button>
+        </div>
+    </form>
+    <br>
+    <a href="/users/show" class="btn btn-primary">Show</a> | 
+    <a href="/users" class="btn btn-primary">Go Back</a>
+</div>
+
+{% endwith %}
+{% endblock %}

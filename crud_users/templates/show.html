@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+<div class="container">
+    <h1>User 1</h1>
+    <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            First Name:
+            <span class="badge">14</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            Last Name:
+            <span class="badge">14</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            Email
+            <span class="badge">2</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            Created_at
+            <span class="badge">1</span>
+        </li>
+    </ul>
+</div>
+
+{% endwith %}
+{% endblock %}

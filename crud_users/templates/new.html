@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+<div class="container">
+    <h1>Add a new user</h1>
+    
+    <form class="form-row form-group" action="create" method="POST">
+        <div class="col-md-6">
+            <input type="text" class="form-control" name="first_name" placeholder="First Name">
+            <br>
+            <input type="text" class="form-control" name="last_name" placeholder="Last Name">
+            <br>
+            <input type="email" class="form-control" name="email" placeholder="email">
+            <br>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+    </form>
+</div>
+
+{% endwith %}
+{% endblock %}
