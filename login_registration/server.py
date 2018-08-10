@@ -22,11 +22,30 @@ def welcome():
     if 'user_id' not in session.keys():
         return redirect('/')
     else:
+        # Get the user information from the database
         data = {'id': session['user_id']}
         mysql = connectToMySQL('login_registration_DB')
-        query = 'SELECT * FROM users WHERE id = %(id)s'
-        row = mysql.query_db(query, data)
-        return render_template('welcome.html', row=row)
+        query = """SELECT users.first_name AS first_name, 
+                    users2.first_name AS sender_name,  
+                    messages.id AS message_id, 
+                    messages.message AS message, 
+                    messages.sender_id AS sender_id, 
+                    messages.receiver_id AS receiver_id, messages.created_at AS created_at
+                    FROM users
+                    LEFT JOIN messages ON messages.receiver_id = users.id
+                    LEFT JOIN users AS users2 ON users2.id = messages.sender_id
+                    WHERE users.id = %(id)s;"""
+        user = mysql.query_db(query, data)
+
+        # Get the list of users except the logged in user
+        mysql = connectToMySQL('login_registration_DB')
+        query = 'SELECT  (SELECT id FROM users WHERE id = %(id)s) AS sender_id, id AS receiver_id, first_name AS receiver_name FROM users WHERE id <> %(id)s;'
+        msg_data = mysql.query_db(query, data)
+        # render welcome page now
+
+        # print('user: ', user)
+        # print('No users: ', msg_data)
+        return render_template('welcome.html', user=user, msg_data=msg_data)
 
 @app.route('/logout')
 def logout():
@@ -56,6 +75,38 @@ def login():
     return redirect('/')
 
 
+######################## @routes for the messages below #############################
+@app.route('/delete/<id>')
+def delete_message(id):
+    print("delete id:", id)
+    data = {'id': id}
+
+    print('dict:', data)
+    mysql = connectToMySQL('login_registration_DB')
+    query = 'DELETE FROM messages WHERE id = %(id)s'
+    mysql.query_db(query, data)
+    return redirect('/wall')
+
+
+@app.route('/send', methods=['POST'])
+def send():
+    print('#'*20, "send route entered", "#"*20)
+    if request.method == 'POST':
+        # record data from form
+        data = {
+            'message': request.form['message'],
+            'sender_id': request.form['sender_id'],
+            'receiver_id': request.form['receiver_id']
+        }
+
+        mysql = connectToMySQL('login_registration_DB')
+        query = 'INSERT INTO messages (message, sender_id, receiver_id) VALUES (%(message)s, %(sender_id)s, %(receiver_id)s);'
+        mysql.query_db(query, data)
+    return redirect('/wall')
+
+
+
+######################## @route for Registration #############################
 @app.route('/register', methods=['POST'])
 def register():
     # validattion check for first Name
@@ -188,6 +239,8 @@ def register():
         session['user_id'] = mysql.query_db(query, data)
         flash("You've been successfully registered", 'register')
         return redirect('/wall')
+
+
 
 
 def debug():

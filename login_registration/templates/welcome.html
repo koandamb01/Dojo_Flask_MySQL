@@ -2,17 +2,50 @@
 
 {% block body %}
 {% with messages = get_flashed_messages(with_categories=true) %}
-<div class="jumbotron">
+
+<nav class="navbar navbar-dark bg-dark">
+    <span class="navbar-brand">Coding Dojo Wall</span>
+    <form class="form-inline my-2 my-lg-0 right">
+        <h5 class="my-2 my-lg-0">Welcome, {{ user[0]['first_name'] }}</h5>
+        <a class="btn btn-outline-primary my-2 my-sm-0" href="/logout" role="button">Logout</a>
+    </form>
+</nav>
+
 <div class="container">
-    {% for category, message in messages %}
-        {% if category == 'register' %}
-            <span class="text-success">{{ message }}</span>
-        {% endif %}
-    {% endfor %}
-    <h1 class="display-3">Welcome, {{ row[0]['first_name'] }}</h1>
-    <p>You've been logged in!</p>
-    <p><a class="btn btn-primary btn-lg" href="/logout" role="button">Logout</a></p>
+    <div class="row">
+        <div class="col-md-6">
+            {% if user[0].message %}
+                <h6>3 Message(s) for you (Michael)</h6>
+                {% for data in user %}
+                    <div class="msg-box">
+                        <p>{{ data.sender_name }} said (3 hours ago):</p>
+                        <span>"{{ data.message }}"</span>
+                        <a href="/delete/{{ data.message_id }}"><i class="fas fa-trash-alt"></i></a>
+                    </div>
+                {% else %}
+                <h6>You have not message</h6>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="col-md-6">
+            <h6>Send a message</h6>
+            <span>You have sent a total of 14 messages so far</span>
+
+            {% for data in msg_data %}
+                <div class="msg-send">
+                    <p>{{ data.receiver_name }}</p>
+                    <form action="/send" method="POST">
+                        <input type="hidden" name="sender_id" value="{{ data.sender_id }}">
+                        <input type="hidden" name="receiver_id" value="{{ data.receiver_id }}">
+                        <input type="text" class="form-group" name="message">
+                        <button class="btn-success" type="submit">Send</button>
+                    </form>
+                </div>
+            {% endfor %} 
+        </div>
+    </div>
 </div>
-</div>
+
 {% endwith %}
 {% endblock %}
