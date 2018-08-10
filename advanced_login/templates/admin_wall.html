@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+<nav class="navbar navbar-dark bg-dark">
+    <span class="navbar-brand">Coding Dojo Wall - Admin Page</span>
+    <form class="form-inline my-2 my-lg-0 right">
+        <h5 class="my-2 my-lg-0">Welcome, {{ first_name }}</h5>
+        <a class="btn btn-outline-primary my-2 my-sm-0" href="/logout" role="button">Logout</a>
+    </form>
+</nav>
+
+<div class="container">
+    <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        
+        <tbody>
+        {% for user in users_list: %}
+        <tr>
+          <td>{{ user['first_name'] }}</td>
+          <td>{{ user['last_name'] }}</td>
+          <td>{{ user['email'] }}</td>
+            {% if user['user_level'] == 9 %}
+                <td>Admin</td>
+                <td>
+                    <a class="btn btn-danger" href="/remove/{{ user['id'] }}">Remove</a>
+                    <a class="btn btn-danger" href="/remove_admin_access/{{ user['id'] }}">Remove Admin Access</a>
+                </td>
+            {% else %}
+                <td>Normal User</td>
+                <td>
+                    <a class="btn btn-danger" href="/remove/{{ user['id'] }}">Remove</a>
+                    <a class="btn btn-success" href="make_admin/{{ user['id'] }}" >Make Admin</a>
+                </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+      </table>
+</div>
+
+{% endwith %}
+{% endblock %}
